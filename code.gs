@@ -5,7 +5,7 @@
  *
  * https://mashe.hawksey.info/2012/09/google-app-script-scheduling-timed-triggers/
  * 
- * Modified for purpose by Jonathan Harrison - @j-m-harrison on gitlab
+ * Custom made for purpose by Jonathan Harrison - @j-m-harrison on gitlabModified
  * Implement: https://developers.google.com/apps-script/guides/triggers/    Probably onGet
  */
 
