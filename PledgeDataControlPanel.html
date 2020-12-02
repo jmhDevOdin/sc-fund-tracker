@@ -1,0 +1,93 @@
+<script type="text/javascript">
+  function updateData() {
+    var importButt = document.getElementById('importButt');
+    importButt.innerHTML = "Importing...";
+    importButt.disabled = true;
+    google.script.run.withSuccessHandler(updateComplete).fetchCSVData();    
+  }
+  
+  function updateComplete() {
+    var importButt = document.getElementById('importButt');
+    importButt.innerHTML = "Import";
+    importButt.disabled = false;
+  }
+  
+  function addDateRows() {
+    google.script.run.updateDateColumn();    
+  }
+  
+  function getCurrentRSIStats() {
+    google.script.run.withSuccessHandler(getCurrentRSIStatsSuccess).fetchPledgeData();    
+  }
+  function getCurrentRSIStatsSuccess(stats) {
+    var funSpan = document.getElementById('currFunds');
+    var citSpan = document.getElementById('currCitizens');
+    var fleetSpan = document.getElementById('currFleet');
+    funSpan.textContent = addCommas(stats.funds);
+    citSpan.textContent = addCommas(stats.fans);
+    fleetSpan.textContent = addCommas(stats.fleet);
+  }
+  
+  function addCommas(nStr) {
+    nStr += '';
+    var x = nStr.split('.');
+    var x1 = x[0];
+    var x2 = x.length > 1 ? '.' + x[1] : '';
+    var rgx = /(\d+)(\d{3})/;
+    while (rgx.test(x1)) {
+        x1 = x1.replace(rgx, '$1' + ',' + '$2');
+    }
+    return x1 + x2;
+  }
+  
+  function fixActiveEmptyCell() {
+    var success = function(message) {
+      alert(message);
+    };
+    google.script.run.withSuccessHandler(success).fixEmptyCell();
+  }
+  
+  function initForm() {
+    getCurrentRSIStats();
+  }
+  
+  initForm();
+</script>
+
+<style type="text/css">
+  ul#uiList span {
+    margin-left: 5px;
+  }
+  ul#uiList li {
+    list-style: none;
+  }
+</style>
+
+<h2>Current Stats:</h2>
+<div>
+  <div>
+    <ul class="uiList">
+      <li><label>Funds</label>&nbsp;<span id='currFunds'></span></li>
+      <li><label>Citizens</label>&nbsp;<span id='currCitizens'></span></li>
+      <li><label>Fleet</label>&nbsp;<span id='currFleet'></span></li>
+    </ul>
+  </div>
+</div>
+<br />  
+<h2>Actions</h2>  
+<div>
+  <div>
+    <ul>
+      <li>
+        <label for=importButt>Import Pledge Data</label>&nbsp;<button id="importButt" onclick="updateData()">Import</button>
+      </li>
+      <li>
+        <label for=dateUpButt>Update Date Column</label>&nbsp;<button id="dateUpButt" onclick="addDateRows()">Update</button>
+      </li>
+      <li>
+        <label for=fixEmptyButt>Fix Empty Cells</label>&nbsp;<button id="fixEmptyButt" onclick="fixActiveEmptyCell()">Active Cell</button>
+      </li>
+    </ul>
+  </div>
+</div>
+<br />
